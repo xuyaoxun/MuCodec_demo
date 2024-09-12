@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="MuCodec: Ultra Low-Bitrate Music Codec">
+  <meta name="keywords" content="Speech Editing, Zero-shot TTS, Neural Codec Language Models">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MuCodec</title>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L7749G0HJZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L7749G0HJZ');
+</script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body" style="padding-bottom: 24px;">
+    <div class="container  is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">MuCodec: Ultra Low-Bitrate Music Codec</h1>
+         
+
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+
+                <a href="https://github.com/Neurips2024User10160/WAKE" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code&Model</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<section id="abs" class="section" style="padding-top: 0px;">
+  <div class="container  is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">TL;DR</h2>
+        <div class="content has-text-justified">
+          <p>
+            Music codecs are a vital aspect of audio codec research, and ultra low-bitrate compression holds significant importance for music transmission and generation. Due to the complexity of music backgrounds and the richness of vocals, solely relying on semantic or acoustic information for modeling cannot effectively reconstruct music with both vocals and backgrounds. To address this issue, we propose the state-of-the-art MuCodec model, which provides the lowest bitrate and best reconstruction performance. MuCodec utilizes MuSSL for extracting both acoustic and semantic features of music, then discretizes them using RVQ and obtains Mel-VAE representations through flow-matching. Finally, the music is reconstructed via a pre-trained MEL-VAE decoder and HiFiGAN. MuCodec can achieve the highest level of music compression and reconstruction tasks at a bitrate of 0.35 kbps.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop is-centered has-text-centered">
+    <div class="hero-body">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">MuCodec's overall process</h2>
+          <img src="./static/images/1.png" class="interpolation-image"
+            alt="Interpolate start reference image." />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="toc" class="section" style="padding-top: 0px;">
+  <div class="container  is-fluid">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Table of Contents</h2>
+        <div class="is-centered">
+          <h3>Music Sample</h3>
+          <ul>
+            <li><a href="#Enlish Sample"><b>Enlish Music</b></a></li>
+            <li><a href="#Chinese Sample"><b>Chinese Music</b></a></li>
+            <li><a href="#Other Language Sample"><b>Other Language Music</b></a></li>
+          </ul>
+
+          <h3>Other types of audio</h3>
+          <ul>
+            <li><a href="#music background"><b>Music Background</b></a></li>
+            <li><a href="#vocal"><b>Vocal</b></a></li>
+            <li><a href="#audio event"><b>Audio Event</b></a></li>
+            <li><a href="#English speech"><b>English Speech</b></a></li>
+            <li><a href="#Chinese speech"><b>Chinese Speech</b></a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+
+
+<section id="Enlish Sample" class="hero is-light ">
+  <div class="hero-body">
+    <div class="container is-fluid">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">English Music</h2>
+          <!-- <div class="content">
+            <p>Sampled from AudioSet</a></p> 
+          </div> -->
+        </div>
+      </div>
+      <div class="columns is-centered has-text-centered">
+        <table class="table" style="background-color: transparent;">
+          <thead>
+            <tr>
+              <th><strong></strong></th>
+              <th><strong>Sample 1</strong></th>
+              <th><strong>Sample 2</strong></th>
+              <th><strong>Sample 3</strong></th>
+              <th><strong>Sample 4</strong></th>
+              <th><strong>Sample 5</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Origin Audio</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/1_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/1_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/1_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/1_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/1_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>low-bitrate scenario (0.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/1_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/1_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/1_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/1_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/1_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/1_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/1_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/1_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/1_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/1_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/1_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/1_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/1_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/1_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/1_5.mp3" type="audio/wav"></audio></td>
+
+            </tr>
+            <tr>
+              <td><strong>high-bitrate scenario (1.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/1_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/1_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/1_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/1_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/1_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/1_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/1_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/1_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/1_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/1_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/1_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/1_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/1_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/1_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/1_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+
+            
+
+          </tbody>
+        </table>
+      </div>
+              <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                  <a href="#toc" class="button is-primary">Go Back to Table of Contents</a>
+                </div>
+              </div>
+    </div>
+  </div>
+</section>
+
+<section id="Chinese Sample" class="hero is-light ">
+  <div class="hero-body">
+    <div class="container is-fluid">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Chinese Music</h2>
+          <!-- <div class="content">
+            <p>Sampled from AudioSet</a></p> 
+          </div> -->
+        </div>
+      </div>
+      <div class="columns is-centered has-text-centered">
+        <table class="table" style="background-color: transparent;">
+          <thead>
+            <tr>
+              <th><strong></strong></th>
+              <th><strong>Sample 1</strong></th>
+              <th><strong>Sample 2</strong></th>
+              <th><strong>Sample 3</strong></th>
+              <th><strong>Sample 4</strong></th>
+              <th><strong>Sample 5</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Origin Audio</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/2_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/2_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/2_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/2_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/2_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>low-bitrate scenario (0.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/2_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/2_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/2_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/2_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/2_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/2_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/2_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/2_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/2_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/2_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/2_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/2_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/2_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/2_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/2_5.mp3" type="audio/wav"></audio></td>
+
+            </tr>
+            <tr>
+              <td><strong>high-bitrate scenario (1.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/2_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/2_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/2_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/2_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/2_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/2_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/2_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/2_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/2_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/2_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/2_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/2_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/2_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/2_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/2_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+
+            
+
+          </tbody>
+        </table>
+      </div>
+              <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                  <a href="#toc" class="button is-primary">Go Back to Table of Contents</a>
+                </div>
+              </div>
+    </div>
+  </div>
+</section>
+
+<section id="Other Language Sample" class="hero is-light ">
+  <div class="hero-body">
+    <div class="container is-fluid">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Other Language Music</h2>
+          <!-- <div class="content">
+            <p>Sampled from AudioSet</a></p> 
+          </div> -->
+        </div>
+      </div>
+      <div class="columns is-centered has-text-centered">
+        <table class="table" style="background-color: transparent;">
+          <thead>
+            <tr>
+              <th><strong></strong></th>
+              <th><strong>France Music</strong></th>
+              <th><strong>Korean Music</strong></th>
+              <th><strong>Japenese Music</strong></th>
+              <th><strong>India Music</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Origin Audio</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/5.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/6.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/7.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/8.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>low-bitrate scenario (0.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/5.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/6.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/7.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/8.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/5.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/6.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/7.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/8.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/5.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/6.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/7.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/8.mp3" type="audio/wav"></audio></td>
+
+            </tr>
+            <tr>
+              <td><strong>high-bitrate scenario (1.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/5.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/6.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/7.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/8.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/5.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/6.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/7.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/8.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/5.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/6.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/7.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/8.mp3" type="audio/wav"></audio></td>
+            </tr>
+
+            
+
+          </tbody>
+        </table>
+      </div>
+              <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                  <a href="#toc" class="button is-primary">Go Back to Table of Contents</a>
+                </div>
+              </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="music background" class="hero is-light ">
+  <div class="hero-body">
+    <div class="container is-fluid">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Music Background</h2>
+          <!-- <div class="content">
+            <p>Sampled from AudioSet</a></p> 
+          </div> -->
+        </div>
+      </div>
+      <div class="columns is-centered has-text-centered">
+        <table class="table" style="background-color: transparent;">
+          <thead>
+            <tr>
+              <th><strong></strong></th>
+              <th><strong>Sample 1</strong></th>
+              <th><strong>Sample 2</strong></th>
+              <th><strong>Sample 3</strong></th>
+              <th><strong>Sample 4</strong></th>
+              <th><strong>Sample 5</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Origin Audio</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/4_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/4_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/4_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/4_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/4_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>low-bitrate scenario (0.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/4_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/4_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/4_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/4_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/4_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/4_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/4_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/4_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/4_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/4_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/4_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/4_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/4_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/4_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/4_5.mp3" type="audio/wav"></audio></td>
+
+            </tr>
+            <tr>
+              <td><strong>high-bitrate scenario (1.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/4_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/4_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/4_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/4_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/4_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/4_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/4_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/4_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/4_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/4_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/4_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/4_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/4_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/4_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/4_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+
+            
+
+          </tbody>
+        </table>
+      </div>
+              <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                  <a href="#toc" class="button is-primary">Go Back to Table of Contents</a>
+                </div>
+              </div>
+    </div>
+  </div>
+</section>
+
+<section id="vocal" class="hero is-light ">
+  <div class="hero-body">
+    <div class="container is-fluid">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Vocal</h2>
+          <!-- <div class="content">
+            <p>Sampled from AudioSet</a></p> 
+          </div> -->
+        </div>
+      </div>
+      <div class="columns is-centered has-text-centered">
+        <table class="table" style="background-color: transparent;">
+          <thead>
+            <tr>
+              <th><strong></strong></th>
+              <th><strong>Sample 1</strong></th>
+              <th><strong>Sample 2</strong></th>
+              <th><strong>Sample 3</strong></th>
+              <th><strong>Sample 4</strong></th>
+              <th><strong>Sample 5</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Origin Audio</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/3_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/3_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/3_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/3_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/3_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>low-bitrate scenario (0.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/3_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/3_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/3_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/3_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/3_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/3_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/3_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/3_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/3_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/3_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/3_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/3_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/3_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/3_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/3_5.mp3" type="audio/wav"></audio></td>
+
+            </tr>
+            <tr>
+              <td><strong>high-bitrate scenario (1.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/3_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/3_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/3_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/3_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/3_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/3_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/3_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/3_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/3_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/3_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/3_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/3_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/3_3.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/3_4.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/3_5.mp3" type="audio/wav"></audio></td>
+            </tr>
+
+            
+
+          </tbody>
+        </table>
+      </div>
+              <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                  <a href="#toc" class="button is-primary">Go Back to Table of Contents</a>
+                </div>
+              </div>
+    </div>
+  </div>
+</section>
+
+<section id="audio event" class="hero is-light ">
+  <div class="hero-body">
+    <div class="container is-fluid">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Audio Event</h2>
+          <!-- <div class="content">
+            <p>Sampled from AudioSet</a></p> 
+          </div> -->
+        </div>
+      </div>
+      <div class="columns is-centered has-text-centered">
+        <table class="table" style="background-color: transparent;">
+          <thead>
+            <tr>
+              <th><strong></strong></th>
+              <th><strong>Sample 1</strong></th>
+              <th><strong>Sample 2</strong></th>
+              <th><strong>Sample 3</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Origin Audio</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/9_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/9_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/9_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>low-bitrate scenario (0.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/9_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/9_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/9_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/9_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/9_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/9_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/9_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/9_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/9_3.mp3" type="audio/wav"></audio></td>
+
+            </tr>
+            <tr>
+              <td><strong>high-bitrate scenario (1.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/9_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/9_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/9_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/9_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/9_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/9_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/9_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/9_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/9_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+
+            
+
+          </tbody>
+        </table>
+      </div>
+              <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                  <a href="#toc" class="button is-primary">Go Back to Table of Contents</a>
+                </div>
+              </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="chinese speech" class="hero is-light ">
+  <div class="hero-body">
+    <div class="container is-fluid">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Chinese Speech</h2>
+          <!-- <div class="content">
+            <p>Sampled from AudioSet</a></p> 
+          </div> -->
+        </div>
+      </div>
+      <div class="columns is-centered has-text-centered">
+        <table class="table" style="background-color: transparent;">
+          <thead>
+            <tr>
+              <th><strong></strong></th>
+              <th><strong>Sample 1</strong></th>
+              <th><strong>Sample 2</strong></th>
+              <th><strong>Sample 3</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Origin Audio</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/10_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/10_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/10_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>low-bitrate scenario (0.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/10_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/10_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/10_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/10_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/10_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/10_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/10_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/10_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/10_3.mp3" type="audio/wav"></audio></td>
+
+            </tr>
+            <tr>
+              <td><strong>high-bitrate scenario (1.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/10_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/10_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/10_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/10_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/10_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/10_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/10_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/10_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/10_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+
+            
+
+          </tbody>
+        </table>
+      </div>
+              <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                  <a href="#toc" class="button is-primary">Go Back to Table of Contents</a>
+                </div>
+              </div>
+    </div>
+  </div>
+</section>
+
+<section id="english speech" class="hero is-light ">
+  <div class="hero-body">
+    <div class="container is-fluid">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">English Speech</h2>
+          <!-- <div class="content">
+            <p>Sampled from AudioSet</a></p> 
+          </div> -->
+        </div>
+      </div>
+      <div class="columns is-centered has-text-centered">
+        <table class="table" style="background-color: transparent;">
+          <thead>
+            <tr>
+              <th><strong></strong></th>
+              <th><strong>Sample 1</strong></th>
+              <th><strong>Sample 2</strong></th>
+              <th><strong>Sample 3</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Origin Audio</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/11_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/11_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/demo_wav/11_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>low-bitrate scenario (0.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/11_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/11_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x1_demo/11_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/11_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/11_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_035_demo/11_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (0.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/11_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/11_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x1_7_demo/11_3.mp3" type="audio/wav"></audio></td>
+
+            </tr>
+            <tr>
+              <td><strong>high-bitrate scenario (1.35kbps)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>GAN-based (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/11_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/11_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/gan_1x4_demo/11_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>Semantic Codec (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/11_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/11_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/semantic_codec_135_demo/11_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+            <tr>
+              <td><strong>MuCodec-proposed (1.35kbps)</strong></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/11_1.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/11_2.mp3" type="audio/wav"></audio></td>
+              <td><audio controls=""><source src="static/audio_sample/demo/mucodec_1x4_7_demo/11_3.mp3" type="audio/wav"></audio></td>
+            </tr>
+
+            
+
+          </tbody>
+        </table>
+      </div>
+              <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                  <a href="#toc" class="button is-primary">Go Back to Table of Contents</a>
+                </div>
+              </div>
+    </div>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container is-fluid">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Licenses</h2>
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative
+            Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            Website source code based on the <a
+            href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> project page.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
