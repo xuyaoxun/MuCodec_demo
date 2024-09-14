@@ -76,8 +76,7 @@
         <h2 class="title is-3">TL;DR</h2>
         <div class="content has-text-justified">
           <p>
-            Music codecs are a vital aspect of audio codec research, and ultra low-bitrate compression holds significant importance for music transmission and generation. Due to the complexity of music backgrounds and the richness of vocals, solely relying on semantic or acoustic information for modeling cannot effectively reconstruct music with both vocals and backgrounds. To address this issue, we propose the state-of-the-art MuCodec model, which provides the lowest bitrate and best reconstruction performance. MuCodec utilizes MuSSL for extracting both acoustic and semantic features of music, then discretizes them using RVQ and obtains Mel-VAE representations through flow-matching. Finally, the music is reconstructed via a pre-trained MEL-VAE decoder and HiFiGAN. MuCodec can achieve the highest level of music compression and reconstruction tasks at a bitrate of 0.35 kbps.
-          </p>
+            Music codecs are a vital aspect of audio codec research, and ultra low-bitrate compression holds significant importance for music transmission and generation. Due to the complexity of music backgrounds and the richness of vocals, solely relying on modeling semantic or acoustic information cannot effectively reconstruct music with both vocals and backgrounds. To address this issue, we propose MuCodec, specifically targeting music compression and reconstruction tasks at ultra low bitrates. MuCodec employs MuEncoder to extract both acoustic and semantic features, discretizes them with RVQ, and obtains Mel-VAE features via flow-matching. The music is then reconstructed using a pre-trained MEL-VAE decoder and HiFi-GAN.  MuCodec can reconstruct high-fidelity music at ultra low (0.35kbps) or high bitrates (1.35kbps), achieving the best results to date in both subjective and objective metrics.          </p>
         </div>
 
       </div>
