@@ -76,7 +76,7 @@
         <h2 class="title is-3">TL;DR</h2>
         <div class="content has-text-justified">
           <p>
-            Music codecs are a vital aspect of audio codec research, and <b>ultra low-bitrate compression</b> holds significant importance for music transmission and generation. Due to the complexity of music backgrounds and the richness of vocals, solely relying on modeling semantic or acoustic information cannot effectively reconstruct music with both vocals and backgrounds. To address this issue, we propose <b>MuCodec</b>, specifically targeting music compression and reconstruction tasks at <b>ultra low bitrates</b>. MuCodec employs MuEncoder to extract both acoustic and semantic features, discretizes them with RVQ, and obtains Mel-VAE features via flow-matching. The music is then reconstructed using a pre-trained MEL-VAE decoder and HiFi-GAN.  MuCodec can reconstruct high-fidelity music at ultra low (0.35kbps) or high bitrates (1.35kbps), achieving the best results to date in both subjective and objective metrics.          </p>
+            Music codecs are a vital aspect of audio codec research, and <b>ultra low-bitrate compression</b> holds significant importance for music transmission and generation. Due to the complexity of music backgrounds and the richness of vocals, solely relying on modeling semantic or acoustic information cannot effectively reconstruct music with both vocals and backgrounds. To address this issue, we propose <b>MuCodec</b>, specifically targeting music compression and reconstruction tasks at <b>ultra low bitrates</b>. MuCodec employs MuEncoder to extract both acoustic and semantic features, discretizes them with RVQ, and obtains Mel-VAE features via flow-matching. The music is then reconstructed using a pre-trained MEL-VAE decoder and HiFi-GAN.  MuCodec can reconstruct high-fidelity music at <b>ultra low (0.35kbps)</b> or <b>high bitrates (1.35kbps)</b>, achieving the best results to date in both subjective and objective metrics.          </p>
         </div>
 
       </div>
@@ -106,15 +106,14 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Table of Contents</h2>
         <div class="is-centered">
-          <h3><b style="font-size: 24px;">Music Sample</b></h3>
+          <h3><a href="#music type"><b style="font-size: 24px;">Music Sample</b></a></h3>
           <ul>
             <li><a href="#Enlish Sample"><b>Enlish Music</b></a></li>
             <li><a href="#Chinese Sample"><b>Chinese Music</b></a></li>
             <li><a href="#Other Language Sample"><b>Other Language Music</b></a></li>
           </ul>
           <hr>
-          <h3><b style="font-size: 24px;">Other Types of Audio</b></h3>
-          <h4>Please note that MuCodec itself does not target other types of audio, and we have <b>not used any other kind of audio data except Music</b>, only demonstrating the <b>zero-shot transfer capability</b>. We will focus on developing a universal audio codec at ultra low bit rates in our future work.</h4>
+          <h3><a href="#other type"><b style="font-size: 24px;">Other Types of Audio (Zero-Shot Transfer Capability)</b></a></h3>
           <ul>
             <li><a href="#music background"><b>Music Background</b></a></li>
             <li><a href="#vocal"><b>Vocal</b></a></li>
@@ -131,7 +130,18 @@
 </section>
 
 
-
+<section id="music type" class="hero is-light ">
+  <div class="hero-body">
+    <div class="container is-fluid">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h1 class="title is-3">Music Samples</h1>
+          <h4>Here we provide samples of music from different languages, including English, Chinese, and other languages. The samples are from Youtube, and the links are provided below each sample.</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 
 <section id="Enlish Sample" class="hero is-light ">
@@ -458,6 +468,19 @@
   </div>
 </section>
 
+<br>
+<section id="other type" class="hero is-light ">
+  <div class="hero-body">
+    <div class="container is-fluid">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h1 class="title is-3">Other Types of Audio (Zero-Shot Transfer Capability)</h1>
+          <h4>Please note that MuCodec itself does not target other types of audio, and we have <b>not used any other kind of audio data except Music</b>, only demonstrating the <b>zero-shot transfer capability</b>. We will focus on developing a universal audio codec at ultra low bit rates in our future work.</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section id="music background" class="hero is-light ">
   <div class="hero-body">
